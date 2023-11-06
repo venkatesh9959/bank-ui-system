@@ -18,7 +18,6 @@ const Login: React.FC = () => {
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const handleChange = (key: string, value: string) => {
-    console.log(key);
     let isValid = true;
     if (key === 'username' && value.length <= 5) {
       isValid = false;
@@ -61,7 +60,7 @@ const Login: React.FC = () => {
   };
   const Failure = (response: any) => {
     setIsLoading(false);
-    console.log(response);
+
     if (response) {
       navigation('/login');
     }

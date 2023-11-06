@@ -51,7 +51,6 @@ const RegistrationPage: React.FC = () => {
     setSelectedState(state);
   };
   const handleChange = (key: string, value: string) => {
-    console.log(key, value);
     let isValid = true;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const contactRegex = /^\d{10}$/;
@@ -163,7 +162,7 @@ const RegistrationPage: React.FC = () => {
       identificationDocumentNo,
     };
 
-    const values = Object.values(customerdata);
+    const values = Object.values(postData);
     const isEmpty = values.every((value) => value !== '');
 
     if (!isEmpty) {

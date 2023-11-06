@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputText from '../../components/InputText';
 import InputSelect from '../../components/InputSelect';
 import Button from '../../components/Button';
@@ -9,7 +9,11 @@ import '../global.scss';
 import './Profile.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../rootStore';
+import { Config_base_url } from '../../utilities/Config/config';
+import Service from '../../Service';
+
 const ProfileDetails = () => {
+  const [userProfile, setUserProfile] = useState<any>();
   const [errors, setErrors] = useState<any>({
     warning: '',
   });
@@ -17,6 +21,20 @@ const ProfileDetails = () => {
   const handleSubmit = () => {};
   const [isLoading, setIsLoading] = useState(false);
   const data: any = useSelector((state: RootState) => state.login?.user);
+
+  useEffect(() => {
+    const url = `${Config_base_url}`;
+    Service.getData(url, onSucessgetResponse);
+  }, []);
+  const onSucessgetResponse = (response: any) => {
+    const userData = response;
+
+    const filteruser = userData?.users?.find((info: any) => {
+      return data?.status?._id === info?._id;
+    });
+
+    setUserProfile(filteruser);
+  };
   return (
     <div className="mainpage">
       <Header />
@@ -33,6 +51,7 @@ const ProfileDetails = () => {
                     labelName="Name"
                     onChangeHandler={(e) => handleChange('name', e.target.value)}
                     required
+                    value={userProfile?.name}
                   />
                   {errors.name && <div className="error-message">{errors.name}</div>}
                 </div>
@@ -42,6 +61,7 @@ const ProfileDetails = () => {
                     labelName="Username"
                     onChangeHandler={(e) => handleChange('username', e.target.value)}
                     required
+                    value={userProfile?.username}
                   />
                   {errors.username && <div className="error-message">{errors.username}</div>}
                 </div>
@@ -66,6 +86,7 @@ const ProfileDetails = () => {
                     name="address"
                     onChangeHandler={(e) => handleChange('address', e.target.value)}
                     required
+                    value={userProfile?.username}
                   />
 
                   {errors.address && <div className="error-message">{errors.address}</div>}
@@ -79,6 +100,7 @@ const ProfileDetails = () => {
                     placeholderText="Select Country"
                     onChangeHandler={(e) => handleChange('country', e.target.value)}
                     required
+                    value={userProfile?.country}
                   />
                   {errors.country && <div className="error-message">{errors.country}</div>}
                 </div>
@@ -103,6 +125,7 @@ const ProfileDetails = () => {
                     name="email"
                     onChangeHandler={(e) => handleChange('email', e.target.value)}
                     required
+                    value={userProfile?.email}
                   />
                   {errors.email && <div className="error-message">{errors.email}</div>}
                 </div>
@@ -113,6 +136,7 @@ const ProfileDetails = () => {
                     name="contact"
                     onChangeHandler={(e) => handleChange('contactNo', e.target.value)}
                     required
+                    value={userProfile?.contactNo}
                   />
                   {errors.contactNo && <div className="error-message">{errors.contactNo}</div>}
                 </div>
@@ -124,6 +148,7 @@ const ProfileDetails = () => {
                     name="dob"
                     onChangeHandler={(e) => handleChange('dob', e.target.value)}
                     required
+                    value={userProfile?.dob}
                   />
                   {errors.dob && <div className="error-message">{errors.dob}</div>}
                 </div>
@@ -148,6 +173,7 @@ const ProfileDetails = () => {
                     name="initialDeposit"
                     onChangeHandler={(e) => handleChange('initialDepositAmount', e.target.value)}
                     required
+                    value={userProfile?.initialDepositAmount}
                   />
                   {errors.initialDepositAmount && (
                     <div className="error-message">{errors.initialDepositAmount}</div>
@@ -174,6 +200,7 @@ const ProfileDetails = () => {
                       handleChange('identificationDocumentNo', e.target.value)
                     }
                     required
+                    value={userProfile?.identificationDocumentNo}
                   />
                   {errors.warning && <div className="error-message">{errors.warning}</div>}
                 </div>

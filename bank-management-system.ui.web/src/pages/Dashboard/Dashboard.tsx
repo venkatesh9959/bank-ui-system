@@ -15,6 +15,7 @@ const Dashboard: React.FC = () => {
   //   dateOfBirth: '20/07/1994',
   // };
   const data: any = useSelector((state: RootState) => state.login?.user);
+  // console.log(filteruser);
 
   return (
     <div className="mainpage">

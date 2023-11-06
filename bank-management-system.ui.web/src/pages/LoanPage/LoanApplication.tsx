@@ -5,6 +5,12 @@ import Sidebar from '../../components/Sidebar';
 import '../global.scss';
 import Button from '../../components/Button';
 import './LoanApplication.scss';
+import { Config_base_url } from '../../utilities/Config/config';
+import Service from '../../Service';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../rootStore';
+import Spinner from '../../components/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 enum LoanType {
   PersonalHomeLoan = 'personalHomeLoan',
@@ -29,6 +35,7 @@ interface LoanDetails {
 
 const LoanApplication = () => {
   const [loanType, setLoanType] = useState<LoanType>();
+  const navigation = useNavigate();
   const [loanDetails, setLoanDetails] = useState<LoanDetails>({
     accountHolderName: '',
     loanAmount: 0,
@@ -45,6 +52,8 @@ const LoanApplication = () => {
     fatherOccupation: '',
     annualIncome: 0,
   });
+  const userData: any = useSelector((state: RootState) => state.login?.user);
+  const [isLoading, setIsLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{
     loanAmount?: string;
     loanInitiateDate?: string;
@@ -135,20 +144,42 @@ const LoanApplication = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const url = `${Config_base_url}/customer/applyLoan`;
+    const account = userData?.status?.accountNo;
+    const {
+      loanAmount,
+      loanInitiateDate,
+      interestRate,
+      loanDuration,
+      companyName,
+      designation,
+      totalExperience,
+      expWithCurrentCompany,
+    } = loanDetails;
 
-    if (loanType === LoanType.PersonalHomeLoan) {
-      const {
-        loanAmount,
-        loanInitiateDate,
-        interestRate,
-        loanDuration,
-        companyName,
-        designation,
-        totalExperience,
-        expWithCurrentCompany,
-      } = loanDetails;
-    }
+    loanType === LoanType.PersonalHomeLoan;
+    const postObject = {
+      accountNo: account,
+      loanData: {
+        loanType: loanType,
+        loanAmount: loanAmount,
+        loanApplyDate: loanInitiateDate,
+        rateOfInterest: interestRate,
+        durationOfloan: loanDuration,
+        companyName: companyName,
+        designation: designation,
+        totalExp: totalExperience,
+        expWtCurrentCompany: expWithCurrentCompany,
+      },
+    };
+    Service.postData(url, postObject, onSucessResponse);
+    setIsLoading(true);
   };
+  const onSucessResponse = (response: any) => {
+    setIsLoading(false);
+    navigation('/dashboard');
+  };
+
   return (
     <div className="mainpage">
       <Header />
@@ -170,7 +201,7 @@ const LoanApplication = () => {
                 <div className="loan-section">
                   <InputText
                     type="text"
-                    value={loanDetails.accountHolderName}
+                    value={loanDetails.accountHolderName || ''}
                     labelName="Account Holder Name"
                     addClasses="input-form"
                     onChangeHandler={handleChange}
@@ -184,7 +215,7 @@ const LoanApplication = () => {
                 <div className="loan-section">
                   <InputText
                     type="number"
-                    value={loanDetails.loanAmount}
+                    value={loanDetails.loanAmount || ''}
                     labelName="Loan Amount"
                     addClasses="input-form"
                     onChangeHandler={handleChange}
@@ -198,7 +229,7 @@ const LoanApplication = () => {
                 <div className="loan-section">
                   <InputText
                     type="date"
-                    value={loanDetails.loanInitiateDate}
+                    value={loanDetails.loanInitiateDate || ''}
                     onChangeHandler={handleChange}
                     labelName="Loan Apply Date"
                     addClasses="input-form date-width"
@@ -218,7 +249,7 @@ const LoanApplication = () => {
                   placeHolderText="Rate of Interest(%)"
                   labelName="Rate of Interest(%)"
                   addClasses="input-form"
-                  value={loanDetails.interestRate}
+                  value={loanDetails.interestRate || ''}
                   disabled={loanDetails.interestRate ? true : false}
                 />
                 <InputText
@@ -226,7 +257,7 @@ const LoanApplication = () => {
                   labelName="Duration of the Loan:"
                   addClasses="input-form"
                   name="loanDuration"
-                  value={loanDetails.loanDuration}
+                  value={loanDetails.loanDuration || ''}
                   disabled={(loanDetails.interestRate && true) || undefined}
                 />
               </div>
@@ -242,7 +273,7 @@ const LoanApplication = () => {
                         labelName="Company Name"
                         addClasses="input-form"
                         name="companyName"
-                        value={loanDetails.companyName}
+                        value={loanDetails.companyName || ''}
                         onChangeHandler={handleChange}
                       />
                       {validationErrors.companyName && (
@@ -255,7 +286,7 @@ const LoanApplication = () => {
                         type="text"
                         addClasses="input-form"
                         name="designation"
-                        value={loanDetails.designation}
+                        value={loanDetails.designation || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.designation && (
@@ -268,7 +299,7 @@ const LoanApplication = () => {
                         type="number"
                         addClasses="input-form"
                         name="totalExperience"
-                        value={loanDetails.totalExperience}
+                        value={loanDetails.totalExperience || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.totalExperience && (
@@ -285,7 +316,7 @@ const LoanApplication = () => {
                         type="number"
                         name="expWithCurrentCompany"
                         addClasses="input-form"
-                        value={loanDetails.expWithCurrentCompany}
+                        value={loanDetails.expWithCurrentCompany || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.expWithCurrentCompany && (
@@ -306,7 +337,7 @@ const LoanApplication = () => {
                         type="number"
                         addClasses="input-form"
                         name="courseFee"
-                        value={loanDetails.courseFee}
+                        value={loanDetails.courseFee || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.courseFee && (
@@ -320,7 +351,7 @@ const LoanApplication = () => {
                         type="text"
                         addClasses="input-form"
                         name="course"
-                        value={loanDetails.course}
+                        value={loanDetails.course || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.course && (
@@ -334,7 +365,7 @@ const LoanApplication = () => {
                         type="text"
                         addClasses="input-form"
                         name="fatherName"
-                        value={loanDetails.fatherName}
+                        value={loanDetails.fatherName || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.fatherName && (
@@ -351,7 +382,7 @@ const LoanApplication = () => {
                         type="text"
                         addClasses="input-form"
                         name="fatherOccupation"
-                        value={loanDetails.fatherOccupation}
+                        value={loanDetails.fatherOccupation || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.fatherOccupation && (
@@ -365,7 +396,7 @@ const LoanApplication = () => {
                         type="text"
                         addClasses="input-form"
                         name="annualIncome"
-                        value={loanDetails.annualIncome}
+                        value={loanDetails.annualIncome || ''}
                         onChangeHandler={(e) => handleChange(e)}
                       />
                       {validationErrors.annualIncome && (
@@ -379,6 +410,7 @@ const LoanApplication = () => {
 
             <Button type="submit" addClass="button right-loan" buttonText="Submit" />
           </form>
+          <Spinner isLoading={isLoading} />
         </div>
       </div>
     </div>

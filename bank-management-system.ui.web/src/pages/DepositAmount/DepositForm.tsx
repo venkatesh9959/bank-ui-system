@@ -36,9 +36,7 @@ const DepositForm: React.FC = () => {
     }
 
     if (key === 'deposit') {
-      console.log('Value:', value);
       if (!/^\d+$/.test(value)) {
-        console.log('Invalid value for deposit');
         setErrors((prevErrors: any) => ({
           ...prevErrors,
           deposit: 'Please enter a valid numeric value for deposit',
@@ -136,7 +134,7 @@ const DepositForm: React.FC = () => {
               type="number"
               labelName="Available Balance"
               addClasses="input-form"
-              value={userinfo?.accountBalance}
+              value={userinfo?.accountBalance || ''}
               disabled={true}
             />
             <Button
