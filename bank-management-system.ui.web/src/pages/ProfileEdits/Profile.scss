@@ -1,0 +1,29 @@
+.profile-row {
+  display: flex;
+  margin-bottom: 20px;
+  margin: 0px 20px;
+}
+.profile-form {
+  width: 250px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  flex: 1;
+  margin-right: 20px;
+}
+.profile-section {
+  display: flex;
+  flex-direction: column;
+}
+.profile-option {
+  width: 264px !important;
+}
+fieldset {
+  border: none;
+  margin-left: -8px;
+}
+.button-right {
+  margin-left: 700px;
+  width: 280px !important;
+}

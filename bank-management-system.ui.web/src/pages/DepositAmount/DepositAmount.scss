@@ -1,0 +1,48 @@
+.content-section {
+  display: flex !important;
+}
+.account-Data h3 {
+  margin-left: 50px;
+  margin-top: 50px;
+}
+.form-deposit {
+  margin-left: 50px;
+  margin-top: 100px;
+}
+
+.form-deopsit-select {
+  width: 270px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  flex: 1;
+  margin-right: 20px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+fieldset {
+  border: none;
+  margin-left: -8px;
+}
+
+.button-deposit {
+  background-color: #2d3238;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  transition: background-color 0.3s;
+}
